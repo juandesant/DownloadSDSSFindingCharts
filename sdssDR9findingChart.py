@@ -12,7 +12,9 @@ See details of the DS9 Finding chart web service at:
 """
 import sys
 import urllib
-sesameQueryUrl = 'http://cdsws.u-strasbg.fr/axis/services/Sesame?method=sesame&resultType=p&all=true&service=NSVA&name=%(name)s'
+sesameQueryUrl = 'http://cdsws.u-strasbg.fr/axis/services/Sesame?'  +\
+                 'method=sesame&resultType=p&all=true&service=NSVA' +\
+                 '&name=%(name)s'
 sdssQueryUrl   = 'http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx'
 
 with open(sys.argv[1],'r') as f:
