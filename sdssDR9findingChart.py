@@ -1,8 +1,19 @@
 #!/usr/bin/env python
+"""
+Usage: sdssDR9findingChart.py fileWithAstroObjects
+
+fileWithAstroObjects is a text file with an anstronomical source name
+per line. Non-valid names are ignored. The result is a finding chart
+from SDSS DR9 as a JPEG downloaded in the directory from which the
+sdssDR9findingChart.py script is called.
+
+See details of the DS9 Finding chart web service at:
+  http://skyserver.sdss3.org/dr9/en/tools/chart/chart.asp
+"""
 import sys
 import urllib
-sesameQueryUrl="http://cdsws.u-strasbg.fr/axis/services/Sesame?method=sesame&resultType=p&all=true&service=NSVA&name=%(name)s"
-sdssQueryUrl = 'http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx'
+sesameQueryUrl = 'http://cdsws.u-strasbg.fr/axis/services/Sesame?method=sesame&resultType=p&all=true&service=NSVA&name=%(name)s'
+sdssQueryUrl   = 'http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx'
 
 with open(sys.argv[1],'r') as f:
     # Get only non-empty lines, stripped of trailing blanks and \n
