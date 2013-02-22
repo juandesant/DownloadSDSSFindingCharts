@@ -87,6 +87,7 @@ To do
 * Add help to the script
 * Add configuration options corresponding to the chart using 
 * Create `setup.py` script so that it can be installed in a user prefix
+* Add parallelisation, so that the tool can work faster, by querying multiple finding charts simoultaneously
 
 Aknowledgements
 ===============
