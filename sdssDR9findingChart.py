@@ -19,12 +19,12 @@ with open(sys.argv[1],'r') as f:
             
             # SDSS DR9
             sdssParamsDict = {
-                'ra': ra,
-                'dec': dec,
-                'scale': 0.396127,
-                'width': 1024,
+                'ra':     ra,
+                'dec':    dec,
+                'scale':  0.396127,
+                'width':  1024,
                 'height': 1024,
-                'opt': 'G',
+                'opt':   'G',
                 'query': 'SR(10,10)'
             }
             
