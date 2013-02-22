@@ -2,7 +2,7 @@
 """
 Usage: sdssDR9findingChart.py fileWithAstroObjects
 
-fileWithAstroObjects is a text file with an anstronomical source name
+fileWithAstroObjects is a text file with an astronomical source name
 per line. Non-valid names are ignored. The result is a finding chart
 from SDSS DR9 as a JPEG downloaded in the directory from which the
 sdssDR9findingChart.py script is called.
