@@ -19,13 +19,14 @@ The result is a finding chart from SDSS DR9 as a JPEG file which is downloaded i
 Installation
 ============
 
-1. Download `sdssDR9findingChart`
-2. `chmod +x sdssDR9findingChart`, to make it executable
-3. Move it to a place in your PATH
+1. `wget https://github.com/juandesant/DownloadSDSSFindingCharts/archive/master.zip`
+2. `unzip master.zip`
+3. `cd DownloadSDSSFindingCharts-master/`
+4. `python setup.py install`
 
-Optionally, you can download the `object.txt` file (for instance, to `~/Downloads`), and test the script with
+The source code includes the `object.txt` file, with which you can test the script by typing
 
-    sdssDR9findingChart ~/Downloads/objects.txt
+    sdssDR9findingChart objects.txt
 
 The expected output will look like:
 
@@ -89,7 +90,6 @@ To do
 
 * Add help to the script
 * Add configuration options corresponding to the chart using
-* Create `setup.py` script so that it can be installed in a user prefix
 * Add parallelisation, so that the tool can work faster, by querying multiple finding charts simultaneously
 
 Aknowledgements
