@@ -1,7 +1,7 @@
 Introduction
 ============
 
-`sdssDR9findingChart.py` is a script that allows you to automatically download finding charts from Data Release 9 (DR9) of the Sloan Digital Sky Survey (SDSS).
+`sdssDR9findingChart` is a script that allows you to automatically download finding charts from Data Release 9 (DR9) of the Sloan Digital Sky Survey (SDSS).
 
 It has been written without using the [`requests`](http://docs.python-requests.org/ "Requests: HTTP for Humans &mdash; Requests 1.1.0 documentation") module so that it can be run without having the users install additional dependencies.
 
@@ -10,22 +10,23 @@ Usage
 
 You invoke the tool with
 
-    sdssDR9findingChart.py fileWithAstroObjects
+    sdssDR9findingChart fileWithAstroObjects
 
 where `fileWithAstroObjects` is a text file containing an astronomical source name per line. Non-valid names are ignored.
 
-The result is a finding chart from SDSS DR9 as a JPEG file which is downloaded in the directory from which the `sdssDR9findingChart.py` script is called.
+The result is a finding chart from SDSS DR9 as a JPEG file which is downloaded in the directory from which the `sdssDR9findingChart` script is called.
 
 Installation
 ============
 
-1. Download `sdssDR9findingChart.py`
-2. `chmod +x sdssDR9findingChart.py`, to make it executable
-3. Move it to a place in your PATH
+1. `wget https://github.com/juandesant/DownloadSDSSFindingCharts/archive/master.zip`
+2. `unzip master.zip`
+3. `cd DownloadSDSSFindingCharts-master/`
+4. `python setup.py install`
 
-Optionally, you can download the `object.txt` file (for instance, to `~/Downloads`), and test the script with
+The source code includes the `object.txt` file, with which you can test the script by typing
 
-    sdssDR9findingChart.py ~/Downloads/objects.txt
+    sdssDR9findingChart objects.txt
 
 The expected output will look like:
 
@@ -88,8 +89,7 @@ To do
 =====
 
 * Add help to the script
-* Add configuration options corresponding to the chart using 
-* Create `setup.py` script so that it can be installed in a user prefix
+* Add configuration options corresponding to the chart using
 * Add parallelisation, so that the tool can work faster, by querying multiple finding charts simultaneously
 
 Aknowledgements
