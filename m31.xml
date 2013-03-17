@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Sesame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://vizier.u-strasbg.fr/xml/sesame_4x.xsd">
+	<Target option="NSVA">
+		<name>m31</name>
+		<!-- Q25098488 #1 -->
+		<Resolver name="N=NED">
+			<INFO>from cache</INFO>
+			<otype>G</otype>
+			<jpos>00:42:44.35 +41:16:08.6</jpos>
+			<jradeg>010.6847929</jradeg>
+			<jdedeg>+41.269065</jdedeg>
+			<refPos>2010ApJS..189...37E</refPos>
+			<errRAmas>80</errRAmas>
+			<errDEmas>80</errDEmas>
+			<Vel>
+				<v>-300.09229</v>
+				<e>3.89730</e>
+				<r>1991RC3.9.C...0000d</r>
+			</Vel>
+			<MType>SA(s)b</MType>
+			<oname>MESSIER 031 </oname>
+			<alias>NGC 0224</alias>
+			<alias>Andromeda Galaxy</alias>
+			<alias>UGC 00454</alias>
+			<alias>CGCG 535-017</alias>
+			<alias>CGCG 0040.0+4100</alias>
+			<alias>MCG +07-02-016</alias>
+			<alias>GIN 801</alias>
+			<alias>B3 0040+409</alias>
+			<alias>2MASX J00424433+4116074</alias>
+			<alias>IRAS 00400+4059</alias>
+			<alias>IRAS F00400+4059</alias>
+			<alias>KTG 01C</alias>
+			<alias>LDCE 0031 NED007</alias>
+			<alias>HDCE 0029 NED003</alias>
+			<alias>HOLM 017A</alias>
+			<alias>PGC 002557</alias>
+			<alias>UZC J004244.3+411608</alias>
+			<alias>87GB 004002.2+405940</alias>
+			<alias>87GB[BWE91] 0040+4059</alias>
+			<alias>6C B004001.6+410004</alias>
+			<alias>MY 0040+409A</alias>
+			<alias>CXO J004244.2+411608</alias>
+			<alias>CXO J004244.3+411608</alias>
+			<alias>CXOM31 J004244.3+411608</alias>
+			<alias>RX J0042.6+4115</alias>
+			<alias>1RXS J004241.8+411535</alias>
+			<alias>MAXI J0043+410</alias>
+			<alias>2PBC J0042.6+4111</alias>
+			<alias>XMMM31 J004244.1+411607</alias>
+			<alias>2XMM J004244.5+411611</alias>
+			<alias>2XMMp J004244.4+411612</alias>
+			<alias>EXSS 0039.9+4059</alias>
+			<alias>1H 0039+408</alias>
+			<alias>1ES 0039+409</alias>
+			<alias>XSS J00425+4102</alias>
+			<alias>[PFJ93] 44</alias>
+			<alias>[SPB93] 010</alias>
+			<alias>LGG 011:[G93] 001</alias>
+			<alias>[MHH96] J004241+411531</alias>
+			<alias>[VCV2001] J004244.3+411610</alias>
+			<alias>MESSIER 031:[KGP2002] r1-010</alias>
+			<alias>MESSIER 031:[PFH2005] 321</alias>
+			<alias>MESSIER 031:[VG2007] 001</alias>
+			<alias>0039+408</alias>
+			<alias>0040+4059</alias>
+			<alias>LEDA 002557</alias>
+			<nrefs>3445</nrefs>
+		</Resolver>
+		<Resolver name="S=Simbad (CDS, via client/server)">
+			<oid>@1575544</oid>
+			<otype>G</otype>
+			<jpos>00:42:44.32 +41:16:07.5</jpos>
+			<jradeg>10.68470833</jradeg>
+			<jdedeg>41.26875</jdedeg>
+			<refPos>2006AJ....131.1163S</refPos>
+			<z>
+				<v>-0.001004</v>
+				<e>0.000023</e>
+				<q>D</q>
+				<r>2002LEDA.........0P</r>
+			</z>
+			<MType>Sb</MType>
+			<oname>M 31</oname>
+			<alias>M 31</alias>
+			<alias>2C 56</alias>
+			<alias>DA 21</alias>
+			<alias>GIN 801</alias>
+			<alias>IRAS F00400+4059</alias>
+			<alias>IRAS 00400+4059</alias>
+			<alias>IRC +40013</alias>
+			<alias>K79 1C</alias>
+			<alias>LEDA 2557</alias>
+			<alias>2MASX J00424433+4116074</alias>
+			<alias>MCG+07-02-016</alias>
+			<alias>NAME ANDROMEDA NEBULA</alias>
+			<alias>NAME ANDROMEDA</alias>
+			<alias>NAME ANDROMEDA Galaxy</alias>
+			<alias>NAME AND NEBULA</alias>
+			<alias>NGC 224</alias>
+			<alias>RAFGL 104</alias>
+			<alias>UGC 454</alias>
+			<alias>UZC J004244.3+411608</alias>
+			<alias>XSS J00425+4102</alias>
+			<alias>Z 535-17</alias>
+			<alias>Z 0040.0+4100</alias>
+			<alias>[DGW65] 4</alias>
+			<alias>[M98c] 004000.1+405943</alias>
+			<alias>[VV2000c] J004244.3+411610</alias>
+			<alias>[VV2003c] J004244.3+411610</alias>
+			<alias>[VV2006] J004244.3+411610</alias>
+			<alias>[VV2010] J004244.3+411610</alias>
+			<alias>[VV98c] J004245.1+411622</alias>
+			<nrefs>7301</nrefs>
+		</Resolver>
+		<Resolver name="V=VizieR (local)">
+			<INFO>Zero (0) answers</INFO>
+		</Resolver>
+	</Target>
+</Sesame>
+<!--- ====Done (2013-Mar-17,20:08:55z)==== -->
