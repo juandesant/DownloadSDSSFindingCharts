@@ -30,39 +30,39 @@ The source code includes the `object.txt` file, with which you can test the scri
 
 The expected output will look like:
 
-	Processing Sesame query for M31
-	Trying to query SDSS for coords 010.6847929 +41.2690650
-	Trying to write M31.jpg
-	Processing Sesame query for HCG7d
-	Trying to query SDSS for coords 009.8283025 +00.8919208
-	Trying to write HCG7d.jpg
-	Processing Sesame query for m82
-	Trying to query SDSS for coords 148.9696875 +69.6793833
-	Trying to write m82.jpg
-	Processing Sesame query for HCG89a
-	Trying to query SDSS for coords 320.0042917 -03.9221389
-	Trying to write HCG89a.jpg
-	Processing Sesame query for HCG1
-	Trying to query SDSS for coords 006.5008343 +25.7181332
-	Trying to write HCG1.jpg
-	Processing Sesame query for HCG2
-	Trying to query SDSS for coords 007.8751675 +08.4312495
-	Trying to write HCG2.jpg
-	Processing Sesame query for HCG92c
-	Trying to query SDSS for coords 339.0147724 +33.9757204
-	Trying to write HCG92c.jpg
-	Processing Sesame query for tontoElQueLoLea
-	Failed during coordinates search for tontoElQueLoLea
-	list index out of range
-	Processing Sesame query for CIG 96
-	Trying to query SDSS for coords 033.8651667 +06.0026111
-	Trying to write CIG 96.jpg
-	Processing Sesame query for CIG 3
-	Trying to query SDSS for coords 000.8410417 +30.7818889
-	Trying to write CIG 3.jpg
-	Processing Sesame query for ngc4321
-	Trying to query SDSS for coords 185.7284629 +15.8218178
-	Trying to write ngc4321.jpg
+    Processing Sesame query for M31
+    Trying to query SDSS for coords 10.68470833 +41.26875000
+    Downloading M31.jpg: 100 %
+    Processing Sesame query for HCG7d
+    Trying to query SDSS for coords 9.82830417 +0.89190833
+    Downloading HCG7d.jpg: 100 %
+    Processing Sesame query for m82
+    Trying to query SDSS for coords 148.96745833 +69.68022222
+    Downloading m82.jpg: 100 %
+    Processing Sesame query for HCG89a
+    Trying to query SDSS for coords 320.00427083 -3.92211667
+    Downloading HCG89a.jpg: 100 %
+    Processing Sesame query for HCG1
+    Trying to query SDSS for coords 6.50000000 +25.71666667
+    Downloading HCG1.jpg: 100 %
+    Processing Sesame query for HCG2
+    Trying to query SDSS for coords 7.85000000 +8.44666667
+    Downloading HCG2.jpg: 100 %
+    Processing Sesame query for HCG92c
+    Trying to query SDSS for coords 339.01483333 +33.97575000
+    Downloading HCG92c.jpg: 100 %
+    Processing Sesame query for tontoElQueLoLea
+    Failed during coordinates search for tontoElQueLoLea
+    list index out of range
+    Processing Sesame query for CIG 96
+    Failed during coordinates search for CIG 96
+    list index out of range
+    Processing Sesame query for CIG 3
+    Failed during coordinates search for CIG 3
+    list index out of range
+    Processing Sesame query for ngc4321
+    Trying to query SDSS for coords 185.72874583 +15.82238056
+    Downloading ngc4321.jpg: 100 %
 
 and the directory will contain the following files:
 
