@@ -31,42 +31,42 @@ The source code includes the `object.txt` file, with which you can test the scri
 The expected output will look like:
 
     Processing Sesame query for M31
-    Trying to query SDSS for coords 10.68470833 +41.26875000
-    Downloading M31.jpg: 100 %
     Processing Sesame query for HCG7d
-    Trying to query SDSS for coords 9.82830417 +0.89190833
-    Downloading HCG7d.jpg: 100 %
     Processing Sesame query for m82
-    Trying to query SDSS for coords 148.96745833 +69.68022222
-    Downloading m82.jpg: 100 %
     Processing Sesame query for HCG89a
-    Trying to query SDSS for coords 320.00427083 -3.92211667
-    Downloading HCG89a.jpg: 100 %
+    Querying SDSS for coordinates 10.68470833 +41.26875000 (M31)
+    Querying SDSS for coordinates 9.82830417 +0.89190833 (HCG7d)
+    Querying SDSS for coordinates 320.00427083 -3.92211667 (HCG89a)
+    Querying SDSS for coordinates 148.96745833 +69.68022222 (m82)
+    Download of M31.jpg completed
     Processing Sesame query for HCG1
-    Trying to query SDSS for coords 6.50000000 +25.71666667
-    Downloading HCG1.jpg: 100 %
+    Download of HCG89a.jpg completed
     Processing Sesame query for HCG2
-    Trying to query SDSS for coords 7.85000000 +8.44666667
-    Downloading HCG2.jpg: 100 %
+    Querying SDSS for coordinates 6.50000000 +25.71666667 (HCG1)
+    Download of m82.jpg completed
     Processing Sesame query for HCG92c
-    Trying to query SDSS for coords 339.01483333 +33.97575000
-    Downloading HCG92c.jpg: 100 %
+    Querying SDSS for coordinates 7.85000000 +8.44666667 (HCG2)
+    Querying SDSS for coordinates 339.01483333 +33.97575000 (HCG92c)
+    Download of HCG1.jpg completed
     Processing Sesame query for tontoElQueLoLea
-    Failed during coordinates search for tontoElQueLoLea
+    Error. Coordinates for tontoElQueLoLea not found in Sesame
     list index out of range
     Processing Sesame query for CIG 96
-    Failed during coordinates search for CIG 96
+    Error. Coordinates for CIG 96 not found in Sesame
     list index out of range
     Processing Sesame query for CIG 3
-    Failed during coordinates search for CIG 3
+    Error. Coordinates for CIG 3 not found in Sesame
     list index out of range
     Processing Sesame query for ngc4321
-    Trying to query SDSS for coords 185.72874583 +15.82238056
-    Downloading ngc4321.jpg: 100 %
+    Download of HCG2.jpg completed
+    Querying SDSS for coordinates 185.72874583 +15.82238056 (ngc4321)
+    Download of HCG92c.jpg completed
+    Download of ngc4321.jpg completed
+    Download of HCG7d.jpg completed
 
 and the directory will contain the following files:
 
-	$ ls -ln *.jpg
+	$ ls -ln \*.jpg
 	-rw-r--r--  1 501  20  103406 21 feb 22:40 CIG 3.jpg
 	-rw-r--r--  1 501  20  122245 21 feb 22:40 CIG 96.jpg
 	-rw-r--r--  1 501  20  102133 21 feb 22:39 HCG1.jpg
