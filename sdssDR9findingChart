@@ -52,20 +52,8 @@ def download_chart(args):
         }
 
         try:
-            print "Trying to query SDSS for coords %s %s" % (ra, dec)
+            print "Querying SDSS for coordinates %s %s (%s)" % (ra, dec, object_name)
             url = sdssQueryUrl + urllib.urlencode(sdssParamsDict)
-
-            # For example, "Downloading M31.jpg: 87 %"
-            msg = "Downloading %s: {0:d} %%" % img_path
-            status = functools.partial(msg.format)
-            sys.stdout.write(status(0))
-            sys.stdout.flush()
-
-            def update_status(count, block_size, total_size):
-                percent = int(count * block_size / total_size * 100)
-                percent = min(percent, 100) # avoid numbers like "107%"
-                sys.stdout.write('\r' + status(percent))
-                sys.stdout.flush()
 
             def remove(path):
                 """ Remove a partially downloaded file, ignore errors """
@@ -73,22 +61,20 @@ def download_chart(args):
                 except: pass
 
             try:
-                urllib.urlretrieve(url, filename = img_path,
-                                       reporthook = update_status)
+                urllib.urlretrieve(url, filename = img_path)
+                print "Download of %s completed" % img_path
             except KeyboardInterrupt:
                 remove(img_path)
                 sys.exit(1)
             except:
                 remove(img_path)
-                print "\nDownload of %s failed" % img_path
-            finally:
-                print
+                print "Download of %s failed" % img_path
 
         except Exception, e:
-            print "Failed during SDSS search"
+            print "Error. Coordinates %s %s not found in SDSS" % (ra, dec)
 
     except Exception, e:
-        print "Failed during coordinates search for %s" % object_name
+        print "Error. Coordinates for %s not found in Sesame" % object_name
         print e
 
 
