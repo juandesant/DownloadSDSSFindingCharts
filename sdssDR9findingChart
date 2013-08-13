@@ -84,7 +84,8 @@ with open(sys.argv[1],'r') as f:
 
     # Use a pool of workers and download the images in parallel.
     # The number of workers is that of CPUs in the system.
-    pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    # As there is more latency than processing, use double the CPU count
+    pool = multiprocessing.Pool(2*multiprocessing.cpu_count())
     map_async_args = ((name, name.strip() + '.jpg') for name in objects)
     result = pool.map_async(download_chart, map_async_args)
 
