@@ -29,9 +29,10 @@ sdssQueryUrl   = 'http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx?'
 
 def download_chart(args):
     """ Download the finding chart for an astronomical object (first element of
-    the two-element tuple 'args') to a path (second element of the tuple)"""
+    the three-element tuple 'args') to a path (second element of the tuple), 
+    adjusting or not the scale to the distance (third element of the tuple)"""
 
-    object_name, img_path = args
+    object_name, img_path, doScaling = args
 
     # Perform the Sesame query
     try:
@@ -39,13 +40,27 @@ def download_chart(args):
         print "Processing Sesame query for %s" % object_name
 
         sesameResponse = urllib.urlopen(sesameQuery).readlines()
+        sesameResponse = map(lambda x: x.rstrip('\r\n'), sesameResponse)
         ra, dec = filter(lambda x: x.find('%J') == 0, sesameResponse)[0].split(' ')[1:3]
-
+        scale = 0.396127
+        if (doScaling):
+            try:
+                velocityList = filter(lambda x: x.find('%V') == 0, sesameResponse)
+                if len(velocityList) > 0:
+                    velElements = velocityList[0].split(' ')
+                    if velElements[1] == 'v':
+                        vel = float(velElements[2])
+                    elif velElements[1] == 'z':
+                        vel = 299792.458*float(velElements[2])
+            except ValueError, e:
+                vel = None
+            if vel != None:
+                scale = scale  * 1500 / vel # Consider the scale 
         # SDSS DR9
         sdssParamsDict = {
             'ra':     ra,
             'dec':    dec,
-            'scale':  0.396127,
+            'scale':  scale,
             'width':  1024,
             'height': 1024,
             'opt':   'G',
@@ -79,18 +94,19 @@ def download_chart(args):
         print e
 
 
-with open(sys.argv[1],'r') as f:
-    # Get only non-empty lines, stripped of trailing blanks and \n
-    objects = filter(lambda x: len(x)>0, map(lambda x: x.strip(), f.readlines()))
+if __name__ == "__main__":
+    with open(sys.argv[1],'r') as f:
+        # Get only non-empty lines, stripped of trailing blanks and \n
+        objects = filter(lambda x: len(x)>0, map(lambda x: x.strip(), f.readlines()))
 
-    # Use a pool of workers and download the images in parallel.
-    # The number of workers is that of CPUs in the system.
-    # As there is more latency than processing, use double the CPU count
-    pool = multiprocessing.Pool(2*multiprocessing.cpu_count())
-    map_async_args = ((name, name.strip() + '.jpg') for name in objects)
-    result = pool.map_async(download_chart, map_async_args)
+        # Use a pool of workers and download the images in parallel.
+        # The number of workers is that of CPUs in the system.
+        # As there is more latency than processing, use double the CPU count
+        pool = multiprocessing.Pool(2*multiprocessing.cpu_count())
+        map_async_args = ((name, name.strip() + '.jpg', True) for name in objects)
+        result = pool.map_async(download_chart, map_async_args)
 
-    while not result.ready():
-        time.sleep(1)
-    result.get()      # reraise exceptions of the remote call, if any
+        while not result.ready():
+            time.sleep(1)
+        result.get()      # reraise exceptions of the remote call, if any
 
