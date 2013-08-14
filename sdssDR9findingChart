@@ -22,9 +22,7 @@ import sys
 import time
 import urllib
 
-sesameQueryUrl = 'http://cdsws.u-strasbg.fr/axis/services/Sesame?'  +\
-                 'method=sesame&resultType=p&all=true&service=NSVA' +\
-                 '&name=%(name)s'
+sesameQueryUrl = 'http://vizier.u-strasbg.fr/viz-bin/nph-sesame/-op/NSVA?%(name)s'
 sdssQueryUrl   = 'http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx?'
 
 def download_chart(args):
