@@ -21,76 +21,195 @@ import os
 import sys
 import time
 import urllib
+from optparse import OptionParser
 
-sesameQueryUrl = 'http://cdsws.u-strasbg.fr/axis/services/Sesame?'  +\
-                 'method=sesame&resultType=p&all=true&service=NSVA' +\
-                 '&name=%(name)s'
+sesameQueryUrl = 'http://vizier.u-strasbg.fr/viz-bin/nph-sesame/-op/NSVA?%(name)s'
 sdssQueryUrl   = 'http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx?'
 
 def download_chart(args):
     """ Download the finding chart for an astronomical object (first element of
     the two-element tuple 'args') to a path (second element of the tuple)"""
 
-    object_name, img_path = args
+    object_name, ra, dec, img_path, width, height, scale, sdss_opt = args
 
     # Perform the Sesame query
-    try:
-        sesameQuery = sesameQueryUrl % {'name': urllib.quote(object_name.strip())}
-        print "Processing Sesame query for %s" % object_name
-
-        sesameResponse = urllib.urlopen(sesameQuery).readlines()
-        ra, dec = filter(lambda x: x.find('%J') == 0, sesameResponse)[0].split(' ')[1:3]
-
-        # SDSS DR9
-        sdssParamsDict = {
-            'ra':     ra,
-            'dec':    dec,
-            'scale':  0.396127,
-            'width':  1024,
-            'height': 1024,
-            'opt':   'G',
-            'query': 'SR(10,10)'
-        }
-
+    if ra == None or dec == None:
         try:
-            print "Querying SDSS for coordinates %s %s (%s)" % (ra, dec, object_name)
-            url = sdssQueryUrl + urllib.urlencode(sdssParamsDict)
+            sesameQuery = sesameQueryUrl % {'name': urllib.quote(object_name.strip())}
+            print "Processing Sesame query for %s" % object_name
 
-            def remove(path):
-                """ Remove a partially downloaded file, ignore errors """
-                try: os.unlink(path)
-                except: pass
-
-            try:
-                urllib.urlretrieve(url, filename = img_path)
-                print "Download of %s completed" % img_path
-            except KeyboardInterrupt:
-                remove(img_path)
-                sys.exit(1)
-            except:
-                remove(img_path)
-                print "Download of %s failed" % img_path
-
+            sesameResponse = urllib.urlopen(sesameQuery).readlines()
+            ra, dec = filter(lambda x: x.find('%J') == 0, sesameResponse)[0].split(' ')[1:3]
         except Exception, e:
-            print "Error. Coordinates %s %s not found in SDSS" % (ra, dec)
+            # We raise the exception if we were not able to come up with a coordinate resolution
+            if ra == None or dec == None:
+                raise e
 
+    # SDSS DR9
+    sdssParamsDict = {
+        'ra':     ra,
+        'dec':    dec,
+        'width':  width,
+        'height': height,
+        'scale':  scale, # Native scale 0.396127
+        'opt':    sdss_opt, # defaults to 'G'
+        'query': 'SR(10,10)'
+    }
+    
+    try:
+        print "Querying SDSS for coordinates %s %s (%s)" % (ra, dec, object_name)
+        url = sdssQueryUrl + urllib.urlencode(sdssParamsDict)
+        
+        def remove(path):
+            """ Remove a partially downloaded file, ignore errors """
+            try: os.unlink(path)
+            except: pass
+        
+        try:
+            urllib.urlretrieve(url, filename = img_path)
+            print "Download of %s completed" % img_path
+        except KeyboardInterrupt:
+            remove(img_path)
+            sys.exit(1)
+        except:
+            remove(img_path)
+            print "Download of %s failed" % img_path
+    
     except Exception, e:
-        print "Error. Coordinates for %s not found in Sesame" % object_name
-        print e
+        print "Error. Coordinates %s %s not found in SDSS" % (ra, dec)
 
+def option_parsing_setup():
+    # Use get opt to get arguments
+    # Creating the options
+    sdss_native_scale = 0.396127
+    
+    op = OptionParser(usage="sdssDR9findingChart [options] file") 
+    op.add_option(
+        "-x", "--x-size", dest="xsize", metavar="PIXEL", type="int",
+        default = 1024,
+        help="The finding chart will be PIXEL pixels wide. Default value, 1024."
+    )
+    op.add_option(
+        "-y", "--y-size", dest="ysize", metavar="PIXEL", type="int",
+        default = 1024,
+        help="The finding chart will be PIXEL pixels high. Default value, 1024."
+    )
+    op.add_option(
+        "-s", "--scale", dest="scale", metavar="SCALE", type="float",
+        default = sdss_native_scale,
+        help=("The finding chart pixel resolution will be SCALE arc-seconds per pixel. "+
+        "Defaults to %s arc-seconds per pixel (native SDSS pixel resolution).") % sdss_native_scale
+    )
+    op.add_option(
+        "-G", "--grid", dest="sdss_opt", action="append_const", 
+        const="G",
+        help="Corresponds with the G option in the SDSS web chart tool; "+
+        "when used, the image sports a grid with  and crosshairs."
+    )
+    op.add_option(
+        "-L", "--label", dest="sdss_opt", action="append_const", 
+        const="L",
+        help="Corresponds with the L option in the SDSS web chart tool; "+
+        "when used, the image has a label overlay indicating the chart parameters."
+    )
+    op.add_option(
+        "-I", "--invert", dest="sdss_opt", action="append_const", 
+        const="I",
+        help="Corresponds with the I option in the SDSS web chart tool; "+
+        "when set, the image color map is inverted."
+    )
+    op.add_option(
+        "-P", "--photometric-objects", dest="sdss_opt", action="append_const", 
+        const="P",
+        help="Corresponds with the P option in the SDSS web chart tool; "+
+        "shows light-blue circles around SDSS photometric objects."
+    )
+    op.add_option(
+        "-S", "--spectroscopic-objects", dest="sdss_opt", action="append_const", 
+        const="S",
+        help="Corresponds with the S option in the SDSS web chart tool; "+
+        "shows red squares around SDSS spectroscopic objects."
+    )
+    op.add_option(
+        "-O", "--outlines", dest="sdss_opt", action="append_const", 
+        const="O",
+        help="Corresponds with the O option in the SDSS web chart tool; "+
+        "shows green outlines around SDSS photometric objects, showing "+
+        "where the area for which the photometry is calculated."
+    )
+    op.add_option(
+        "-B", "--bounding-boxes", dest="sdss_opt", action="append_const", 
+        const="B",
+        help="Corresponds with the B option in the SDSS web chart tool; "+
+        "shows pink squares that bound SDSS photometric objects."
+    )
+    op.add_option(
+        "-F", "--fields", dest="sdss_opt", action="append_const", 
+        const="F",
+        help="Corresponds with the F option in the SDSS web chart tool; "+
+        "shows gray outlines demarcating the SDSS fields."
+    )
+    op.add_option(
+        "-M", "--masks", dest="sdss_opt", action="append_const", 
+        const="M",
+        help="Corresponds with the M option in the SDSS web chart tool; "+
+        "shows pink footprints around masked objects, such as bright objects "+
+        "and data artifacts."
+    )
+    op.add_option(
+        "-Q", "--plates", dest="sdss_opt", action="append_const", 
+        const="Q",
+        help="Corresponds with the Q option in the SDSS web chart tool; "+
+        "shows circular plates (in lavender) used for spectra collection."
+    )
+    op.add_option(
+        "-m", "--mode", dest="mode", metavar="MODE",
+        type="choice",
+        choices=["OBJECT_LIST", "SDSS_COORDINATES"],
+        default="OBJECT_LIST",
+        help="MODE can be either OBJECT_LIST or SDSS_COORDINATES. If set to "+
+             "OBJECT_LIST, each line is expected to have an object name, "+
+             "and Sesame will be used to obtain RA and DEC. This is the default. "+
+             "If set to SDSS_COORDINATES, the file is supposed to be either "+
+             "comma-, blank-, or tab-separated, with at least columns for RA y Dec. "+
+             "If a column with name size is present, the tool will try to fit "+
+             "the size into the frame."
+    )
+    
+    return op
 
-with open(sys.argv[1],'r') as f:
-    # Get only non-empty lines, stripped of trailing blanks and \n
-    objects = filter(lambda x: len(x)>0, map(lambda x: x.strip(), f.readlines()))
-
-    # Use a pool of workers and download the images in parallel.
-    # The number of workers is that of CPUs in the system.
-    # As there is more latency than processing, use double the CPU count
-    pool = multiprocessing.Pool(2*multiprocessing.cpu_count())
-    map_async_args = ((name, name.strip() + '.jpg') for name in objects)
-    result = pool.map_async(download_chart, map_async_args)
-
-    while not result.ready():
-        time.sleep(1)
-    result.get()      # reraise exceptions of the remote call, if any
+# Define __main__ environment
+if __name__=='__main__':
+    op = option_parsing_setup() # Returns a suitably setup option parser
+    (options, args) = op.parse_args()
+    
+    objects_file = args[0] # We get the first file; we could loop on this, but not for the time being.
+    
+    with open(objects_file,'r') as f:
+        # Get only non-empty lines, stripped of trailing blanks and \n
+        if options.mode == "OBJECT_LIST":
+            objects = filter(lambda x: len(x)>0, map(lambda x: x.strip(), f.readlines()))
+        # TODO add the case for SDSS_COORDINATES
+        
+        # Use a pool of workers and download the images in parallel.
+        # The number of workers is that of CPUs in the system.
+        # As there is more latency than processing, use double the CPU count; using more causes problems with Sesame throttling 
+        pool = multiprocessing.Pool(2*multiprocessing.cpu_count())
+        map_async_args = None
+        if options.mode == "OBJECT_LIST":
+            map_async_args = (
+                (name, None, None, name.strip() + '.jpg',
+                 options.xsize, options.ysize, options.scale,
+                 "".join(options.sdss_opt))
+                   for name in objects
+            )
+        elif options.mode == "SDSS_COORDINATES":
+            pass # TODO do the case for SDSS_COORDINATES
+        else: 
+            pass
+        result = pool.map_async(download_chart, map_async_args)
+        
+        while not result.ready():
+            time.sleep(1)
+        result.get()      # reraise exceptions of the remote call, if any
 
