@@ -103,6 +103,16 @@ def option_parsing_setup():
         "Defaults to %s arc-seconds per pixel (native SDSS pixel resolution).") % sdss_native_scale
     )
     op.add_option(
+        "-r", "--rescale", dest="autosize", metavar="VELOCITY", type="float",
+        help="When this option is set, the size of the image is chosen so that "+
+        "most of the object can fit the image. Works more reliably for objects "+
+        "with recessional velocities >1500 km/s. If you want to know the actual "+
+        "scale, use it with the -L option. The autosizing mechanism will try to "+
+        "assume a scaling proportional to the ration of the given VELOCITY and "+
+        "the object velocity as reported by Sesame. It cannot work with the "+
+        "SDSS_COORDINATES option. Use the --size-column option instead."
+    )
+    op.add_option(
         "-G", "--grid", dest="sdss_opt", action="append_const", 
         const="G",
         help="Corresponds with the G option in the SDSS web chart tool; "+
