@@ -30,9 +30,10 @@ def download_chart(args):
     """ Download the finding chart for an astronomical object (first element of
     the two-element tuple 'args') to a path (second element of the tuple)"""
 
-    object_name, ra, dec, img_path, width, height, scale, sdss_opt = args
+    object_name, ra, dec, img_path, width, height, scale, rescale_velocity, sdss_opt = args
 
     # Perform the Sesame query
+    sesameResponse = None
     if ra == None or dec == None:
         try:
             sesameQuery = sesameQueryUrl % {'name': urllib.quote(object_name.strip())}
@@ -44,7 +45,22 @@ def download_chart(args):
             # We raise the exception if we were not able to come up with a coordinate resolution
             if ra == None or dec == None:
                 raise e
-
+        # If we are here, we did not have ra and dec, and now we have it, so we have a valid sesameResponse
+        if sesameResponse != None and rescale_velocity != None:
+            try:
+                velocityList = filter(lambda x: x.find('%V') == 0, sesameResponse)
+                if len(velocityList) > 0:
+                    velElements = velocityList[0].split(' ')
+                    # We can use either velocity in km/s, or z 
+                    if velElements[1] == 'v':
+                        vel = float(velElements[2])
+                    elif velElements[1] == 'z':
+                        vel = 299792.458*float(velElements[2])
+            except ValueError, e:
+                vel = None
+            if vel != None:
+                scale = scale  * rescale_velocity / vel # Consider the scale 
+            
     # SDSS DR9
     sdssParamsDict = {
         'ra':     ra,
@@ -221,7 +237,7 @@ if __name__=='__main__':
         if options.mode == "OBJECT_LIST":
             map_async_args = (
                 (name, None, None, name.strip() + '.jpg',
-                 options.xsize, options.ysize, options.scale,
+                 options.xsize, options.ysize, options.scale, options.rescale_velocity,
                  "".join(options.sdss_opt))
                    for name in objects
             )
