@@ -29,7 +29,7 @@ def download_chart(args):
     """ Download the finding chart for an astronomical object (first element of
     the two-element tuple 'args') to a path (second element of the tuple)"""
 
-    object_name, ra, dec, img_path, width, height, scale, rescale_velocity, sdss_opt = args
+    object_name, ra, dec, img_path, size, width, height, scale, rescale_velocity, sdss_opt = args
 
     # Perform the Sesame query
     sesameResponse = None
@@ -59,7 +59,10 @@ def download_chart(args):
                 vel = None
             if vel != None:
                 scale = scale  * rescale_velocity / vel # Consider the scale 
-            
+    else: # We have been provided with ra and dec
+        if size: # We have also been provided with a size
+            # We want the R50 scale to occupy min(width/size, height/size pixels)
+            scale = min(width/size, height/size)
     # SDSS DR9
     sdssParamsDict = {
         'ra':     ra,
@@ -133,6 +136,14 @@ def option_parsing_setup():
         "assume a scaling proportional to the ration of the given VELOCITY and "+
         "the object velocity as reported by Sesame. It cannot work with the "+
         "SDSS_COORDINATES option. Use the --size-column option instead."
+    )
+    op.add_option(
+        "-c", "--size-column", dest="size_column", type="store_true",
+        help="This option can only be used with the SDSS_COORDINATES option. "+
+        "If present, the file must contain a column named size, which shows "+
+        "the size of the object in arcseconds. "+
+        "The script will use the size column to compute the scale that will "+
+        "keep the galaxy centered and zoomed in."
     )
     op.add_option(
         "-G", "--grid", dest="sdss_opt", action="append_const", 
@@ -222,31 +233,90 @@ if __name__=='__main__':
     
     objects_file = args[0] # We get the first file; we could loop on this, but not for the time being.
     
+    # Use a pool of workers and download the images in parallel.
+    # As there is more latency than processing, we don't use CPU counts; instead, we use a number that does not cause Sesame to throttle our client 
+    pool = multiprocessing.Pool(8)
+    map_async_args = None
+    
     with open(objects_file,'r') as f:
         # Get only non-empty lines, stripped of trailing blanks and \n
         if options.mode == "OBJECT_LIST":
             objects = filter(lambda x: len(x)>0, map(lambda x: x.strip(), f.readlines()))
-        # TODO add the case for SDSS_COORDINATES
-        
-        # Use a pool of workers and download the images in parallel.
-        # The number of workers is that of CPUs in the system.
-        # As there is more latency than processing, use double the CPU count; using more causes problems with Sesame throttling 
-        pool = multiprocessing.Pool(2*multiprocessing.cpu_count())
-        map_async_args = None
-        if options.mode == "OBJECT_LIST":
             map_async_args = (
-                (name, None, None, name.strip() + '.jpg',
+                (name, None, None, name.strip() + '.jpg', None,
                  options.xsize, options.ysize, options.scale, options.rescale_velocity,
                  "".join(options.sdss_opt))
                    for name in objects
             )
         elif options.mode == "SDSS_COORDINATES":
-            pass # TODO do the case for SDSS_COORDINATES
-        else: 
-            pass
-        result = pool.map_async(download_chart, map_async_args)
+            # Use astropy to read coordinates
+            try:
+                from astropy.table import Table
+                import numpy as np
+            except ImportError, e:
+                print "You need astropy and numpy for parsing SDSS_COORDINATES files"
+                raise e
+            
+            
+            objectArray    = Table.read(f, format='ascii')
+            columnNames    = objectArray.colnames
+            raColNames     = filter(lambda x: x.find("ra") == 0, columnNames)
+            decColNames    = filter(lambda x: x.find("dec") == 0, columnNames)
+            sizeColNames   = filter(lambda x: x.find("size") == 0, columnNames)
+            objectColNames = filter( # we try to use columns starting with obj, name, source or target
+                                lambda x: x.find("obj") == 0 
+                                       or x.find("name") == 0
+                                       or x.find("source") == 0
+                                       or x.find("target") == 0,
+                                columnNames
+            )
+            
+            raCol     = None
+            decCol    = None
+            objectCol = None
+            sizeCol   = None
+            
+            if not raColNames or not decColNames:
+                raise ValueError("There sould be a ra and dec columns")
+            else:
+                raCol = raColNames[0]
+                decCol = decColNames[0]
+            
+            if not objectColNames:
+                numRows = len(np.array(objectArray))
+                objectArray.add_column(
+                              Column( name='objid', data=range(1,numRows+1) ),
+                              index=0
+                )
+                objectColNames = ['objid']
+                objectCol = objectColNames[0]
+            
+            if options.size_column:
+                if not sizeColNames:
+                    raise ValueError(
+                        "You must provide a file with a size column if you use the --size-column option"
+                    )
+                else:
+                    sizeCol = sizeColNames[0]
+            else: # We need to add the column for easier job
+                numRows = len(np.array(objectArray))
+                objectArray.add_column(
+                            Column( name = 'size', data=[None for i in range(numRows)])
+                )
+                sizeCol = 'size'
+
+            map_async_args = (
+                (row[objectCol], row[raCol], row[decCol], "%s.jpg" % row[objectCol], row[sizeCol],
+                options.xsize, options.ysize, options.scale, options.rescale_velocity,
+                "".join(options.sdss_opt))
+                for row in rows
+            )
+        else:
+            raise ValueError("--mode should be OBJECT_LIST or SDSS_COORDINATES")
         
+        # With the pool and map_async_args we get our results
+        result = pool.map_async(download_chart, map_async_args)
         while not result.ready():
             time.sleep(1)
-        result.get()      # reraise exceptions of the remote call, if any
+        result.get() # reraise exceptions of the remote call, if any
 
