@@ -253,7 +253,7 @@ if __name__=='__main__':
         elif options.mode == "SDSS_COORDINATES":
             # Use astropy to read coordinates
             try:
-                from astropy.table import Table
+                from astropy.table import Table, Column
                 import numpy as np
             except ImportError, e:
                 print "You need astropy and numpy for parsing SDSS_COORDINATES files"
