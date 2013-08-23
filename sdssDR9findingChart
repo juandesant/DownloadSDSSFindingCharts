@@ -233,6 +233,11 @@ if __name__=='__main__':
     if options.zoom != None:
         options.scale = options.scale/options.zoom
     
+    # If no options, 
+    sdss_opt = ""
+    if options.sdss_opt:
+        sdss_opt = "".join(options.sdss_opt)
+    
     objects_file = args[0] # We get the first file; we could loop on this, but not for the time being.
     
     # Use a pool of workers and download the images in parallel.
@@ -247,7 +252,7 @@ if __name__=='__main__':
             map_async_args = (
                 (name, None, None, name.strip() + '.jpg', None,
                  options.xsize, options.ysize, options.scale, options.rescale_velocity,
-                 "".join(options.sdss_opt))
+                 sdss_opt)
                    for name in objects
             )
         elif options.mode == "SDSS_COORDINATES":
@@ -309,7 +314,7 @@ if __name__=='__main__':
             map_async_args = (
                 (row[objectCol], row[raCol], row[decCol], "%s.jpg" % row[objectCol], row[sizeCol],
                 options.xsize, options.ysize, options.scale, options.rescale_velocity,
-                "".join(options.sdss_opt))
+                sdss_opt)
                 for row in objectArray
             )
         else:
