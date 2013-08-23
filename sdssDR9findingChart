@@ -63,7 +63,7 @@ def download_chart(args):
     else: # We have been provided with ra and dec
         if size: # We have also been provided with a size
             # We want the R50 scale to occupy min(width/size, height/size pixels)
-            scale = size*8/max(width/2, height/2)
+            scale = size*8/min(width/2, height/2)
     
     # SDSS DR9
     sdssParamsDict = {
