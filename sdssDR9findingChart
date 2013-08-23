@@ -305,14 +305,14 @@ if __name__=='__main__':
                     "You must provide a file with a size column "+
                     "if you use the --size-column option"
                 )
-            if sizeColNames:
+            if sizeColNames and options.size_column:
                 sizeCol = sizeColNames[0]
-            else: # We need to add the column for easier job
+            else: # We add a fake column both if there is no size column, and if we don't want to use the provided size column
                 numRows = len(np.array(objectArray))
                 objectArray.add_column(
-                            Column( name = 'size', data=[None for i in range(numRows)])
+                            Column( name = 'fake_size', data=[None for i in range(numRows)])
                 )
-                sizeCol = 'size'
+                sizeCol = 'fake_size'
             
             map_async_args = (
                 (row[objectCol], row[raCol], row[decCol], "%s.jpg" % row[objectCol], row[sizeCol],
