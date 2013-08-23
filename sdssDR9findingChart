@@ -13,7 +13,7 @@ See details of the DS9 Finding chart web service at:
   http://skyserver.sdss3.org/dr9/en/tools/chart/chart.asp
 """
 
-from __future__ import division
+from __future__ import division # so that 1/2 == 0.5, instead of 1/2==0
 
 import functools
 import multiprocessing
