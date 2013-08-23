@@ -310,7 +310,7 @@ if __name__=='__main__':
                 (row[objectCol], row[raCol], row[decCol], "%s.jpg" % row[objectCol], row[sizeCol],
                 options.xsize, options.ysize, options.scale, options.rescale_velocity,
                 "".join(options.sdss_opt))
-                for row in rows
+                for row in objectArray
             )
         else:
             raise ValueError("--mode should be OBJECT_LIST or SDSS_COORDINATES")
