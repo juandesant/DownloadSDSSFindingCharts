@@ -140,7 +140,7 @@ def option_parsing_setup():
         "SDSS_COORDINATES option. Use the --size-column option instead."
     )
     op.add_option(
-        "-c", "--size-column", dest="size_column", type="store_true",
+        "-c", "--size-column", dest="size_column", action="store_true",
         help="This option can only be used with the SDSS_COORDINATES option. "+
         "If present, the file must contain a column named size, which shows "+
         "the size of the object in arcseconds. "+
