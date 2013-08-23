@@ -103,7 +103,14 @@ def option_parsing_setup():
         "Defaults to %s arc-seconds per pixel (native SDSS pixel resolution).") % sdss_native_scale
     )
     op.add_option(
-        "-r", "--rescale", dest="autosize", metavar="VELOCITY", type="float",
+        "-z", "--zoom", dest="zoom", metavar="ZOOM-RATIO", type="float",
+        help=("The finding chart pixel resolution will be zoomed by ZOOM-RATIO from specified "+
+        "scale ratio (native scale ratio if -s is not used). Values above 1 "+
+        "imply zooming in, values below 1 zooming out. Used alone, is equivalent to the -s "+
+        "option with a SCALE value of %s/ZOOM-RATIO.") % sdss_native_scale
+    )
+    op.add_option(
+        "-r", "--rescale", dest="rescale_velocity", metavar="VELOCITY", type="float",
         help="When this option is set, the size of the image is chosen so that "+
         "most of the object can fit the image. Works more reliably for objects "+
         "with recessional velocities >1500 km/s. If you want to know the actual "+
@@ -194,6 +201,9 @@ def option_parsing_setup():
 if __name__=='__main__':
     op = option_parsing_setup() # Returns a suitably setup option parser
     (options, args) = op.parse_args()
+    
+    if options.zoom != None:
+        options.scale = options.scale/options.zoom
     
     objects_file = args[0] # We get the first file; we could loop on this, but not for the time being.
     
