@@ -15,7 +15,6 @@ See details of the DS9 Finding chart web service at:
 
 from __future__ import division # so that 1/2 == 0.5, instead of 1/2==0
 
-import functools
 import multiprocessing
 import os
 import sys
