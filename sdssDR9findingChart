@@ -296,15 +296,17 @@ if __name__=='__main__':
                               index=0
                 )
                 objectColNames = ['objid']
-                objectCol = objectColNames[0]
             
-            if options.size_column:
-                if not sizeColNames:
-                    raise ValueError(
-                        "You must provide a file with a size column if you use the --size-column option"
-                    )
-                else:
-                    sizeCol = sizeColNames[0]
+            # One way or the other, we have an object column
+            objectCol = objectColNames[0]
+            
+            if options.size_column and not sizeColNames:
+                raise ValueError(
+                    "You must provide a file with a size column "+
+                    "if you use the --size-column option"
+                )
+            if sizeColNames:
+                sizeCol = sizeColNames[0]
             else: # We need to add the column for easier job
                 numRows = len(np.array(objectArray))
                 objectArray.add_column(
