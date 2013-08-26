@@ -174,9 +174,9 @@ class SesameHelper(object):
         cleaned_response = filter(
                                 # #! marks a section not returned 
                                 lambda x: x.find('#!') != 0 and (
-                                            x.find('#') == 0 or
-                                            x.find('%') == 0
-                                          ) ,
+                                          x.find('#') == 0 or
+                                          x.find('%') == 0
+                                ),
                                 cleaned_response
         )
         return cleaned_response
