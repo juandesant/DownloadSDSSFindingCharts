@@ -99,7 +99,7 @@ def download_chart(args):
         print "Error. Coordinates %s %s not found in SDSS" % (ra, dec)
 
 def option_parsing_setup():
-    # Use optparse to get the arguments
+    """Use optparse to get the arguments"""
     # Constants for the defaults
     sdss_native_scale = 0.396127
     pixel_size = 512
