@@ -17,12 +17,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Usage: sdssDR9findingChart fileWithAstroObjects
+Usage:
+    sdssDR9findingChart [-h|--help]
+    sdssDR9findingChart [options] fileWithAstroObjects
 
 fileWithAstroObjects is a text file with an astronomical source name
 per line. Non-valid names are ignored. The result is a finding chart
 from SDSS DR9 as a JPEG downloaded in the directory from which the
 sdssDR9findingChart script is called.
+
+Use "sdssDR9findingChart -h" for the whole list of supported options.
 
 See details of the DS9 Finding chart web service at:
   http://skyserver.sdss3.org/dr9/en/tools/chart/chart.asp
