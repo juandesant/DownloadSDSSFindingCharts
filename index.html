@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="DownloadSDSSfindingCharts : Sloan Digital Sky Survey (SDSS) DR9 finding chart downloader" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>DownloadSDSSfindingCharts</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/juandesant/DownloadSDSSFindingCharts">View on GitHub</a>
+
+          <h1 id="project_title">DownloadSDSSfindingCharts</h1>
+          <h2 id="project_tagline">Sloan Digital Sky Survey (SDSS) DR9 finding chart downloader</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/juandesant/DownloadSDSSFindingCharts/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/juandesant/DownloadSDSSFindingCharts/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h1>
+
+<p><code>sdssDR9findingChart</code> is a script that allows you to automatically download finding charts from Data Release 9 (DR9) of the Sloan Digital Sky Survey (SDSS).</p>
+
+<p>It has been written without using the <a href="http://docs.python-requests.org/" title="Requests: HTTP for Humans &amp;mdash; Requests 1.1.0 documentation"><code>requests</code></a> module so that it can be run without having the users install additional dependencies.</p>
+
+<h1>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<p>You invoke the tool with</p>
+
+<pre><code>sdssDR9findingChart [-options] fileWithAstroObjects
+</code></pre>
+
+<p>where <code>fileWithAstroObjects</code> is a text file containing an astronomical source name per line. Non-valid names are ignored.</p>
+
+<p>The result is a finding chart from SDSS DR9 as a JPEG file which is downloaded in the directory from which the <code>sdssDR9findingChart</code> script is called.</p>
+
+<p>See available options in the <a href="Configuration">Configuration</a> section.</p>
+
+<h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<ol>
+<li><code>wget https://github.com/juandesant/DownloadSDSSFindingCharts/archive/master.zip</code></li>
+<li><code>unzip master.zip</code></li>
+<li><code>cd DownloadSDSSFindingCharts-master/</code></li>
+<li><code>python setup.py install</code></li>
+</ol><p>The source code includes the <code>object.txt</code> file, with which you can test the script by typing</p>
+
+<pre><code>sdssDR9findingChart objects.txt
+</code></pre>
+
+<p>The expected output will look like:</p>
+
+<pre><code>Processing Sesame query for M31
+Processing Sesame query for HCG7d
+Processing Sesame query for m82
+Processing Sesame query for HCG89a
+Querying SDSS for coordinates 10.68470833 +41.26875000 (M31)
+Querying SDSS for coordinates 9.82830417 +0.89190833 (HCG7d)
+Querying SDSS for coordinates 320.00427083 -3.92211667 (HCG89a)
+Querying SDSS for coordinates 148.96745833 +69.68022222 (m82)
+Download of M31.jpg completed
+Processing Sesame query for HCG1
+Download of HCG89a.jpg completed
+Processing Sesame query for HCG2
+Querying SDSS for coordinates 6.50000000 +25.71666667 (HCG1)
+Download of m82.jpg completed
+Processing Sesame query for HCG92c
+Querying SDSS for coordinates 7.85000000 +8.44666667 (HCG2)
+Querying SDSS for coordinates 339.01483333 +33.97575000 (HCG92c)
+Download of HCG1.jpg completed
+Processing Sesame query for tontoElQueLoLea
+Error. Coordinates for tontoElQueLoLea not found in Sesame
+list index out of range
+Processing Sesame query for CIG 96
+Error. Coordinates for CIG 96 not found in Sesame
+list index out of range
+Processing Sesame query for CIG 3
+Error. Coordinates for CIG 3 not found in Sesame
+list index out of range
+Processing Sesame query for ngc4321
+Download of HCG2.jpg completed
+Querying SDSS for coordinates 185.72874583 +15.82238056 (ngc4321)
+Download of HCG92c.jpg completed
+Download of ngc4321.jpg completed
+Download of HCG7d.jpg completed
+</code></pre>
+
+<p>and the directory will contain the following files:</p>
+
+<pre><code>$ ls -ln \*.jpg
+-rw-r--r--  1 501  20  103406 21 feb 22:40 CIG 3.jpg
+-rw-r--r--  1 501  20  122245 21 feb 22:40 CIG 96.jpg
+-rw-r--r--  1 501  20  102133 21 feb 22:39 HCG1.jpg
+-rw-r--r--  1 501  20  101813 21 feb 22:40 HCG2.jpg
+-rw-r--r--  1 501  20  118322 21 feb 22:39 HCG7d.jpg
+-rw-r--r--  1 501  20  113634 21 feb 22:39 HCG89a.jpg
+-rw-r--r--  1 501  20  120794 21 feb 22:40 HCG92c.jpg
+-rw-r--r--  1 501  20   22884 21 feb 22:39 M31.jpg
+-rw-r--r--  1 501  20  106942 21 feb 22:39 m82.jpg
+-rw-r--r--  1 501  20  109373 21 feb 22:40 ngc4321.jpg
+</code></pre>
+
+<h1>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h1>
+
+<p>The tool allows the same configuration available in the web tool:</p>
+
+<ul>
+<li>Setting horizontal and vertical sizes (<code>-x</code>, <code>-y</code>)</li>
+<li>Setting image resolution by pixel scale (<code>-s</code>), or zoom-ratio (<code>-z</code>)</li>
+<li>Automatically adjusting size based on recession velocity (<code>-r</code>)</li>
+<li>Grid and cross-hairs (<code>-G</code>)</li>
+<li>Overlay label of image properties (<code>-L</code>)</li>
+<li>Colormap inversion (<code>-I</code>)</li>
+<li>Marking of photometric and spectroscopic objects (<code>-P</code>, <code>-S</code>)</li>
+<li>Outlines of objects, bounding boxes, fields, masks, and plates (<code>-O</code>, <code>-B</code>, <code>-F</code>, <code>-M</code>, <code>-Q</code>)</li>
+</ul><p>The tool also sports two modes (selectable with the <code>--mode</code> option): <code>OBJECT_LIST</code>, where the file provided does not contain coordinates, but names that can be resolved with Sesame; and <code>SDSS_COORDINATES</code>, in which the file provides coordinates for the objects (a column named <code>name</code>, <code>source</code>, <code>target</code> or <code>objid</code> is looked up to use —if available— for naming the resulting images, but is not used to query Sesame), and optionally a column named <code>size</code> can be used to automatically size the image so that it fills the field (<code>-c/--size-column</code>).</p>
+
+<p>You can get the whole list of options using the <code>-h</code> or <code>--help</code> options:</p>
+
+<pre><code>Usage: sdssDR9findingChart [options] file
+
+Options:
+  -h, --help            show this help message and exit
+  -x PIXEL, --x-size=PIXEL
+                        The finding chart will be PIXEL pixels wide. Default
+                        value, 512.
+  -y PIXEL, --y-size=PIXEL
+                        The finding chart will be PIXEL pixels high. Default
+                        value, 512.
+  -s SCALE, --scale=SCALE
+                        The finding chart pixel resolution will be SCALE arc-
+                        seconds per pixel. Defaults to 0.396127 arc-seconds
+                        per pixel (native SDSS pixel resolution).
+  -z ZOOM-RATIO, --zoom=ZOOM-RATIO
+                        The finding chart pixel resolution will be zoomed by
+                        ZOOM-RATIO from specified scale ratio (native scale
+                        ratio if -s is not used). Values above 1 imply zooming
+                        in, values below 1 zooming out. Used alone, is
+                        equivalent to the -s option with a SCALE value of
+                        0.396127/ZOOM-RATIO.
+  -r VELOCITY, --rescale=VELOCITY
+                        When this option is set, the size of the image is
+                        chosen so that most of the object can fit the image.
+                        Works more reliably for objects with recessional
+                        velocities &gt;1500 km/s. If you want to know the actual
+                        scale, use it with the -L option. The autosizing
+                        mechanism will try to assume a scaling proportional to
+                        the ration of the given VELOCITY and the object
+                        velocity as reported by Sesame. It cannot work with
+                        the SDSS_COORDINATES option. Use the --size-column
+                        option instead.
+  -c, --size-column     This option can only be used with the SDSS_COORDINATES
+                        option. If present, the file must contain a column
+                        named size, which shows the size of the object in
+                        arcseconds. The script will use the size column to
+                        compute the scale that will keep the galaxy centered
+                        and zoomed in.
+  -G, --grid            Corresponds with the G option in the SDSS web chart
+                        tool; when used, the image sports a grid with  and
+                        crosshairs.
+  -L, --label           Corresponds with the L option in the SDSS web chart
+                        tool; when used, the image has a label overlay
+                        indicating the chart parameters.
+  -I, --invert          Corresponds with the I option in the SDSS web chart
+                        tool; when set, the image color map is inverted.
+  -P, --photometric-objects
+                        Corresponds with the P option in the SDSS web chart
+                        tool; shows light-blue circles around SDSS photometric
+                        objects.
+  -S, --spectroscopic-objects
+                        Corresponds with the S option in the SDSS web chart
+                        tool; shows red squares around SDSS spectroscopic
+                        objects.
+  -O, --outlines        Corresponds with the O option in the SDSS web chart
+                        tool; shows green outlines around SDSS photometric
+                        objects, showing where the area for which the
+                        photometry is calculated.
+  -B, --bounding-boxes  Corresponds with the B option in the SDSS web chart
+                        tool; shows pink squares that bound SDSS photometric
+                        objects.
+  -F, --fields          Corresponds with the F option in the SDSS web chart
+                        tool; shows gray outlines demarcating the SDSS fields.
+  -M, --masks           Corresponds with the M option in the SDSS web chart
+                        tool; shows pink footprints around masked objects,
+                        such as bright objects and data artifacts.
+  -Q, --plates          Corresponds with the Q option in the SDSS web chart
+                        tool; shows circular plates (in lavender) used for
+                        spectra collection.
+  -m MODE, --mode=MODE  MODE can be either OBJECT_LIST or SDSS_COORDINATES. If
+                        set to OBJECT_LIST, each line is expected to have an
+                        object name, and Sesame will be used to obtain RA and
+                        DEC. This is the default. If set to SDSS_COORDINATES,
+                        the file is supposed to be either comma-, blank-, or
+                        tab-separated, with at least columns for RA y Dec. If
+                        a column with name size is present, the tool will try
+                        to fit the size into the frame.
+</code></pre>
+
+<p>For more information on which options are valid, see <a href="http://skyserver.sdss3.org/dr9/en/tools/chart/chart.asp">http://skyserver.sdss3.org/dr9/en/tools/chart/chart.asp</a></p>
+
+<h1>
+<a name="aknowledgements" class="anchor" href="#aknowledgements"><span class="octicon octicon-link"></span></a>Aknowledgements</h1>
+
+<p>This tool has been written withing the framework of the <a href="http://amiga.iaa.es/" title="AMIGA : Analysis of the interstellar Medium of Isolated GAlaxies">AMIGA project</a>, and with support from Spanish grants AYA2008-06181 and AYA2011-30491-C02.</p>
+
+<p>Juande Santander Vela has a contract with CSIC (National Council for Scientific Research) in the JAE-Doc modality of the "Junta de Ampliación de Estudios" program, with funding from the European Social Fund.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DownloadSDSSfindingCharts maintained by <a href="https://github.com/juandesant">juandesant</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
